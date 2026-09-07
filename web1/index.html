@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- This page is served by web1. The badge script at the bottom
+       reads this tag so you can SEE the round robin when you
+       refresh. Stamp web2's copy as "web2" and leave both alone. -->
+  <meta name="provider" content="web1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capstone - web1</title>
+  <style>
+    /* REPLACE EVERYTHING FROM HERE DOWN with your own design in
+       Stage 5. This is just enough style to prove the page loads. */
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .server-badge {
+      display: inline-block;
+      background: #555;
+      color: #fff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your project title goes here</h1>
+  <span class="server-badge" id="server-badge">loading...</span>
+
+  <!-- REPLACE this placeholder <main> with the HTML that will
+       display your data. In Stage 5 your JavaScript will fetch()
+       from the API and fill this area. -->
+  <main id="content">
+    <p>This is the starter page. Your data will appear here.</p>
+  </main>
+  <p id="status"></p>
+
+  <script>
+    // Round-robin badge - keep this in your finished page.
+    const server = document.querySelector('meta[name="provider"]').content;
+    document.getElementById('server-badge').textContent = 'Served by ' + server;
+
+    // Stage 5: your fetch() call and rendering code goes here.
+  </script>
+</body>
+</html>

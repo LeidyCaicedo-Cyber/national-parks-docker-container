@@ -1,0 +1,14 @@
+{
+  "name": "parks-api",
+  "version": "1.0.0",
+  "description": "State park directory API for the Apprenti capstone",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mssql": "^11.0.1"
+  }
+}

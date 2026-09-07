@@ -1,0 +1,26 @@
+services:
+  lb:
+    image: caddy:2
+    volumes:
+      - ./load-balancer/Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - "8080:80"
+    networks:
+      - web-net
+
+  web1:
+    image: caddy:2
+    volumes:
+      - ./web1:/srv
+    networks:
+      - web-net
+
+  web2:
+    image: caddy:2
+    volumes:
+      - ./web2:/srv
+    networks:
+      - web-net
+
+networks:
+  web-net:

@@ -1,0 +1,16 @@
+:80 {
+	# Requests that start with /api are forwarded to the Node API
+	# container. "api" is the service name from compose.yaml -
+	# Docker's DNS turns it into an IP address.
+	handle /api/* {
+		reverse_proxy api:3000
+	}
+
+	# Everything else is spread across the two web servers,
+	# first request to web1, next to web2, back and forth.
+	handle {
+		reverse_proxy web1:80 web2:80 {
+			lb_policy round_robin
+		}
+	}
+}
