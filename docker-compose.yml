@@ -7,11 +7,17 @@ services:
       - "8080:80"
     networks:
       - web-net
+    depends_on:
+      - web1
+      - web2
+      - api
+
 
   web1:
     image: caddy:2
     volumes:
       - ./web1:/srv
+      - ./web1/Caddyfile:/etc/caddy/Caddyfile
     networks:
       - web-net
 
@@ -19,9 +25,24 @@ services:
     image: caddy:2
     volumes:
       - ./web2:/srv
+      - ./web2/Caddyfile:/etc/caddy/Caddyfile
     networks:
       - web-net
 
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_PASSWORD: ${SA_PASSWORD}
+    networks:
+      - web-net
+      - data-net
+    depends_on:
+      db:
+        condition: service_healthy
+        
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
