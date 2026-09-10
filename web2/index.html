@@ -2,43 +2,134 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>State Park Explorer</title>
   <!-- This page is served by web1. The badge script at the bottom
        reads this tag so you can SEE the round robin when you
        refresh. Stamp web2's copy as "web2" and leave both alone. -->
-  <meta name="provider" content="web1">
+  <meta name="provider" content="web2">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Capstone - web1</title>
-  <style>
-    /* REPLACE EVERYTHING FROM HERE DOWN with your own design in
-       Stage 5. This is just enough style to prove the page loads. */
-    * { box-sizing: border-box; }
-    body {
-      font-family: system-ui, sans-serif;
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-    .server-badge {
-      display: inline-block;
-      background: #555;
-      color: #fff;
-      padding: 0.25rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-  </style>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Your project title goes here</h1>
-  <span class="server-badge" id="server-badge">loading...</span>
+  <header class="site-header">
+    <div class="header-inner">
 
-  <!-- REPLACE this placeholder <main> with the HTML that will
-       display your data. In Stage 5 your JavaScript will fetch()
-       from the API and fill this area. -->
+      <a href="#home" class="logo">
+        🏔️ National Park Explorer
+      </a>
+
+      <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#parks">Parks</a>
+      </nav>
+
+      <span class="server-badge" id="server-badge">loading...</span>
+
+    </div>
+  </header>
+
   <main id="content">
-    <p>This is the starter page. Your data will appear here.</p>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+      <div class="hero-content">
+
+        <h1>
+          Discover America's<br>
+          National Parks
+        </h1>
+
+        <p class="hero-text">
+          Explore breathtaking landscapes, wildlife, and unforgettable
+          adventures across America's parks.
+        </p>
+
+        <a href="#parks" class="hero-button">
+          Explore Our Park Directory
+        </a>
+
+      </div>
+
+      <div class="hero-image">
+        <img
+          src="images/hero.jpg"
+          alt="Mountain landscape and lake"
+        >
+      </div>
+    </section>
+
+    <!-- Parks Directory -->
+    <section class="parks-section" id="parks">
+
+      <div class="section-heading">
+
+        <div>
+          <p class="eyebrow">
+            PLAN YOUR ADVENTURE
+          </p>
+
+          <h2>
+            Explore the Parks
+          </h2>
+        </div>
+
+        <p class="section-description">
+          Discover beautiful parks, unique landscapes, and outdoor
+          adventures across the United States.
+        </p>
+
+      </div>
+
+
+      <!-- Park cards are populated by JavaScript -->
+      <div id="parks-container">
+
+        <!-- Temporary placeholder -->
+        <article class="park-card">
+
+          <div class="park-card-content">
+
+            <p class="park-label">
+              STATE PARK
+            </p>
+
+            <h3>
+              Itasca State Park
+            </h3>
+
+            <p class="park-location">
+              Minnesota
+            </p>
+
+            <p>
+              Minnesota's oldest state park, where the Mississippi River
+              begins its journey as a small stream.
+            </p>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
   </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+
+    <div class="footer-inner">
+
+      <p>
+        🏔️ National Park Explorer
+      </p>
+    </div>
+
+  </footer>
+
   <p id="status"></p>
 
   <script>
@@ -46,7 +137,60 @@
     const server = document.querySelector('meta[name="provider"]').content;
     document.getElementById('server-badge').textContent = 'Served by ' + server;
 
-    // Stage 5: your fetch() call and rendering code goes here.
+    const parksContainer = document.getElementById('parks-container');
+    const status = document.getElementById('status');
+
+    async function loadParks() {
+      try {
+        status.textContent = 'Loading parks...';
+
+        const response = await fetch('/api/parks');
+
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
+        }
+
+        const parks = await response.json();
+
+        parksContainer.innerHTML = '';
+
+        parks.forEach(park => {
+          const card = document.createElement('article');
+          card.className = 'park-card';
+
+          card.innerHTML = `
+            <div class="park-card-content">
+              <p class="park-label">STATE PARK</p>
+              <h3>${park.name}</h3>
+              <p class="park-location">${park.state}</p>
+              <p>${park.description}</p>
+
+              <div class="park-details">
+                <p>
+                  <strong>Established</strong>
+                  ${park.established}
+                </p>
+
+                <p>
+                  <strong>Acres</strong>
+                  ${park.acres.toLocaleString()}
+                </p>
+              </div>
+
+            </div>
+          `;
+
+          parksContainer.appendChild(card);
+        });
+
+        status.textContent = `${parks.length} parks loaded`;
+      } catch (error) {
+        console.error('Error loading parks:', error);
+        status.textContent = 'Unable to load parks.';
+      }
+    }
+
+    loadParks();
   </script>
 </body>
 </html>
